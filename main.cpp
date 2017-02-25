@@ -1,177 +1,107 @@
 #include <iostream>
-#include <stdlib.h>
-
+#include<conio.h>
 using namespace std;
 
-class list
+class dll
 {
-    list* head=NULL;
-    list* tail=NULL;
-    list* next;
-    int val;
-public:
-    void ins();
-    void display();
-    void del();
-    void insb();
-    void reverse();
-    void delalt();
+ dll *rlink;
+ dll *header;
+ dll *llink;
+ int info;
+ public:
+     dll()
+     {
+         header=NULL;
+     }
+     void ins_beg();
+     void ins_end();
+     void display(dll*);
+     dll* concat(dll x1,dll x2);
 };
-void list::ins()
+void dll::ins_beg()
 {
-list* temp=new list;
-cout<<"Enter the information to be inserted"<<endl;
-int x;
-cin>>x;
-temp->val=x;
-temp->next=NULL;
-if(head==NULL)
+    dll* temp=new dll;
+    temp->rlink=temp->llink=NULL;
+    cout<<"insert value"<<endl;
+    cin>>temp->info;
+    if(header==NULL)
+    {
+        header=temp;
+        return;
+    }
+    else
+    {
+     temp->rlink=header;
+     header->llink=temp;
+    //(header->rlink)->llink=temp;
+    header=temp;
+    return;
+    }
+}
+void dll::ins_end()
 {
-    head=temp;
+    dll* temp=new dll;
+    cout<<"insert value"<<endl;
+    cin>>temp->info;
+    temp->rlink=NULL;
+    temp->llink=NULL;
+    if(header==NULL)
+    {
+        header=temp;
+        return ;
+    }
+    dll* cur=header;
+
+    while(cur->rlink!=NULL)
+    {
+        cur=cur->rlink;
+    }
+    cur->rlink=temp;
+    temp->llink=cur;
     return;
 }
-temp->next=head;
-head=temp;
-}
-void list::insb()
+dll* dll::concat(dll x1,dll x2)
 {
-    cout<<"Enter the element b4 which we have to insert the new element"<<endl;
-    int k;
-    cin>>k;
-    cout<<"Enter the element to insert"<<endl;
-    int c;
-    cin>>c;
-    list* cur=head;
-    while(cur->next->val!=k)
+    dll* cur=x1.header;
+    while(cur->rlink!=NULL)
     {
-        cur=cur->next;
+        cur=cur->rlink;
     }
-    list* e =cur->next;
-    list* temp=new list;
-    temp->val=c;
-    temp->next=e;
-    cur->next=temp;
-
+    cur->rlink=x2.header;
+    x2.header->llink=cur;
+    return x1.header;
 }
-void list::reverse()
+void dll::display(dll *header)
 {
-    list*r=NULL;
-    list*p=head;
-    list*q=p->next;
-    if(head==NULL)
-    {
-        cout<<"empty";
-        return;
-    }
-    while(q!=NULL)
-    {
-        //r=p;
-        p->next=r;
-        r=p;
-        p=q;
-        q=q->next;
-    }
-    p->next=r;
-    head=p;
-
-}
-void list::delalt()
-{
-    list*cur=head;
-    if(head==NULL)
-    {
-        cout<<"empty";
-        return;
-    }
-    if(head->next==NULL)
-    {
-        return;
-    }
-    while(cur->next->next!=NULL)
-    {
-    list*c=cur->next;
-    cur->next=cur->next->next;
-    delete(c);
-    cur=cur->next;
-    }
-    if(cur->next)
-    {
-        delete(cur->next);
-        cur->next=NULL;
-    }
-}
-void list::del()
-{
-    if(head==NULL)
-    {
-        cout<<"empty";
-        return;
-    }
-list* cur=head;
-head=head->next;
-delete(cur);
-}
-void list::display()
-{
-    list*cur=head;
+    dll* cur=header;
     while(cur!=NULL)
     {
-        cout<<cur->val<<" ";
-        cur=cur->next;
+        cout<<cur->info;
+        cur=cur->rlink;
+
     }
+    return;
 }
 int main()
 {
-    list l;
-    int k;
-    int p=1;
-    while(p)
+    dll x1,x2,x;
+    int c=1;
+    cout<<"Enter values in x1"<<endl;
+    while(c==1)
     {
-        cout<<"1. insert 2. delete 3. display 4. exit 5. insert before 6. reverse 7. delete_alternate"<<endl;
-        cin>>k;
-        switch(k)
-        {
-    case 1:
-        {
-        l.ins();
-        break;
-        }
-    case 2:
-        {
-        l.del();
-        break;
-        }
-    case 3:
-        {
-        l.display();
-        break;
-        }
-    case 4:
-        {
-        exit(0);
-        break;
-        }
-    case 5:
-        {
-            l.insb();
-            break;
-        }
-    case 6:
-        {
-            l.reverse();
-            break;
-        }
-    case 7:
-        {
-            l.delalt();
-            break;
-        }
-    default:
-        cout<<"invalid";
-
+        x1.ins_end();
+        cout<<"Press 1 to continue,2to exit"<<endl;
+        cin>>c;
     }
+    cout<<"Enter values in x2"<<endl;
+    while(c==2)
+    {
+        x2.ins_end();
+        cout<<"Press 2 to continue,3to exit"<<endl;
+        cin>>c;
     }
-
+    dll* k=x.concat(x1,x2);
+    x.display(k);
     //cout << "Hello world!" << endl;
     return 0;
 }
